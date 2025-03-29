@@ -37,12 +37,15 @@ internal actual fun doConvert(input: String, form: NormalizationForm): String {
                 isExternalRepresentation = false,
                 contentsDeallocator = null,
             )
+            println("CFStringCreateWithBytesNoCopy: $s")
             val m = CFStringCreateMutableCopy(
                 alloc = null,
                 maxLength = 0,
                 theString = s,
             )
+            println("CFStringCreateMutableCopy: $m")
             CFRelease(s)
+            println("CFRelease(s)")
             m
         }
         try {
@@ -55,6 +58,7 @@ internal actual fun doConvert(input: String, form: NormalizationForm): String {
                     NormalizationForm.NFKC -> CFStringNormalizationFormKC
                 },
             )
+            println("CFStringNormalize")
             val usedBufLen = alloc<CFIndexVar>()
             val range = CFRangeMake(0, CFStringGetLength(m))
             CFStringGetBytes(
@@ -67,6 +71,7 @@ internal actual fun doConvert(input: String, form: NormalizationForm): String {
                 maxBufLen = 0,
                 usedBufLen = usedBufLen.ptr,
             )
+            println("CFStringGetBytes1")
             if (input.isNotEmpty()) check(usedBufLen.value > 0)
             if (usedBufLen.value > Int.MAX_VALUE) {
                 throw IllegalArgumentException("result String is too long")
@@ -84,6 +89,7 @@ internal actual fun doConvert(input: String, form: NormalizationForm): String {
                     usedBufLen = null,
                 )
             }
+            println("CFStringGetBytes2")
             return convertedBytes.decodeToString()
         } finally {
             CFRelease(m)
