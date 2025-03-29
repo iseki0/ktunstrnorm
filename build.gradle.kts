@@ -11,6 +11,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    commonTestImplementation(kotlin("test"))
+}
+
 kotlin {
     jvmToolchain(21)
     targets {
@@ -18,12 +22,12 @@ kotlin {
             freeCompilerArgs.add("-Xexpect-actual-classes")
             freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
         }
-//        jvm {
-//            compilerOptions {
-////                jvmTarget = JvmTarget.JVM_1_8
-//                freeCompilerArgs.add("-Xjvm-default=all-compatibility")
-//            }
-//        }
+        jvm {
+            compilerOptions {
+//                jvmTarget = JvmTarget.JVM_1_8
+                freeCompilerArgs.add("-Xjvm-default=all-compatibility")
+            }
+        }
 //        js {
 //            browser()
 //            nodejs()
@@ -69,14 +73,17 @@ kotlin {
         fun NamedDomainObjectProvider<KotlinSourceSet>.apple64() {
             get().dependsOn(apple64Main)
         }
+
         val apple32Main by creating { dependsOn(commonMain.get()) }
         fun NamedDomainObjectProvider<KotlinSourceSet>.apple32() {
             get().dependsOn(apple32Main)
         }
+
         val linux64Main by creating { dependsOn(commonMain.get()) }
         fun NamedDomainObjectProvider<KotlinSourceSet>.linux64() {
             get().dependsOn(linux64Main)
         }
+
         val linux32Main by creating { dependsOn(commonMain.get()) }
         fun NamedDomainObjectProvider<KotlinSourceSet>.linux32() {
             get().dependsOn(linux32Main)
