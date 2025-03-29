@@ -63,7 +63,7 @@ kotlin {
 //        androidNativeArm64()
 //        androidNativeX64()
 //        androidNativeX86()
-//        mingwX64()
+        mingwX64()
         watchosDeviceArm64()
     }
     applyDefaultHierarchyTemplate()
