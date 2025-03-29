@@ -16,6 +16,7 @@ import platform.CoreFoundation.CFStringCreateWithBytesNoCopy
 import platform.CoreFoundation.CFStringGetBytes
 import platform.CoreFoundation.CFStringGetLength
 import platform.CoreFoundation.CFStringNormalize
+import platform.CoreFoundation.kCFAllocatorNull
 
 
 private const val CFStringEncodingUTF8 = 0x08000100u
@@ -35,7 +36,7 @@ internal actual fun doConvert(input: String, form: NormalizationForm): String {
                 numBytes = bytes.size.toLong(),
                 encoding = CFStringEncodingUTF8,
                 isExternalRepresentation = false,
-                contentsDeallocator = null,
+                contentsDeallocator = kCFAllocatorNull,
             )
             val m = CFStringCreateMutableCopy(
                 alloc = null,
