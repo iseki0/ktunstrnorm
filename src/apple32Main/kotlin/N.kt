@@ -16,6 +16,7 @@ import platform.CoreFoundation.CFStringCreateWithBytesNoCopy
 import platform.CoreFoundation.CFStringGetBytes
 import platform.CoreFoundation.CFStringGetLength
 import platform.CoreFoundation.CFStringNormalize
+import platform.CoreFoundation.kCFAllocatorNull
 
 
 private const val CFStringEncodingUTF8 = 0x08000100u
@@ -26,6 +27,7 @@ private const val CFStringNormalizationFormKC = 3
 
 @OptIn(ExperimentalForeignApi::class)
 internal actual fun doConvert(input: String, form: NormalizationForm): String {
+    if (input.isEmpty()) return ""
     memScoped {
         val bytes = input.encodeToByteArray()
         val m = bytes.usePinned { pinned ->
@@ -35,7 +37,7 @@ internal actual fun doConvert(input: String, form: NormalizationForm): String {
                 numBytes = bytes.size,
                 encoding = CFStringEncodingUTF8,
                 isExternalRepresentation = false,
-                contentsDeallocator = null,
+                contentsDeallocator = kCFAllocatorNull,
             )
             val m = CFStringCreateMutableCopy(
                 alloc = null,

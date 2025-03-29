@@ -27,6 +27,7 @@ private const val CFStringNormalizationFormKC = 3L
 
 @OptIn(ExperimentalForeignApi::class)
 internal actual fun doConvert(input: String, form: NormalizationForm): String {
+    if (input.isEmpty()) return ""
     memScoped {
         val bytes = input.encodeToByteArray()
         val m = bytes.usePinned { pinned ->
