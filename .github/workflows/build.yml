@@ -50,7 +50,7 @@ jobs:
         run: ./gradlew build check --no-configuration-cache
       - name: Upload crash logs (macOS only)
         if: failure() && runner.os == 'macOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: crash-logs
           path: ~/Library/Logs/DiagnosticReports/
