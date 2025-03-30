@@ -48,8 +48,8 @@ kotlin {
         iosArm64()
 
         // Tier 2
-//        linuxX64()
-//        linuxArm64()
+        linuxX64()
+        linuxArm64()
         watchosArm32()
         watchosArm64()
         watchosX64()
@@ -59,10 +59,10 @@ kotlin {
         tvosArm64()
 
         // Tier 3
-//        androidNativeArm32()
-//        androidNativeArm64()
-//        androidNativeX64()
-//        androidNativeX86()
+        androidNativeArm32()
+        androidNativeArm64()
+        androidNativeX64()
+        androidNativeX86()
         mingwX64()
         watchosDeviceArm64()
     }
@@ -86,7 +86,8 @@ kotlin {
 
         val linux32Main by creating { dependsOn(commonMain.get()) }
         fun NamedDomainObjectProvider<KotlinSourceSet>.linux32() {
-            get().dependsOn(linux32Main)
+//            get().dependsOn(linux32Main)
+            linux64()
         }
 
 
