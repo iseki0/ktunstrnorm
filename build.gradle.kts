@@ -133,6 +133,13 @@ kotlin {
     }
 }
 
+tasks.getByName("jvmJar") {
+    check(this is Jar)
+    manifest {
+        attributes("Automatic-Module-Name" to "space.iseki.ktunstrnorm")
+    }
+}
+
 signing {
     useGpgCmd()
     sign(publishing.publications)
