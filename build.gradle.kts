@@ -28,14 +28,14 @@ kotlin {
                 freeCompilerArgs.add("-Xjvm-default=all-compatibility")
             }
         }
-//        js {
-//            browser()
-//            nodejs()
-//        }
-//        wasmJs {
-//            browser()
-//            nodejs()
-//        }
+        js {
+            browser()
+            nodejs()
+        }
+        wasmJs {
+            browser()
+            nodejs()
+        }
 //        wasmWasi {
 //            nodejs()
 //        }
