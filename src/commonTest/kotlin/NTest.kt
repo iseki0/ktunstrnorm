@@ -36,4 +36,9 @@ class NormalizationTest {
         val result = doConvert(input, NormalizationForm.NFKC)
         assertEquals(expected, result, "NFKC normalization failed")
     }
+
+    @Test
+    fun testEmpty() {
+        assertEquals("", "".normalize(NormalizationForm.NFKC))
+    }
 }

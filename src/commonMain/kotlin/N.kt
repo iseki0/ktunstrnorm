@@ -6,3 +6,5 @@ enum class NormalizationForm {
 
 internal expect fun doConvert(input: String, form: NormalizationForm): String
 
+fun String.normalize(form: NormalizationForm): String = if (isEmpty()) "" else doConvert(this, form)
+
