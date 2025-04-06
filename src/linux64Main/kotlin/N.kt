@@ -24,14 +24,11 @@ import kotlinx.cinterop.usePinned
 import kotlinx.cinterop.value
 import platform.posix.RTLD_LAZY
 import platform.posix.dlclose
-import platform.posix.dlerror
 import platform.posix.dlopen
 import platform.posix.dlsym
 
 internal const val UNORM2_COMPOSE = 0
 internal const val UNORM2_DECOMPOSE = 1
-internal const val UNORM2_FCD = 2
-internal const val UNORM2_COMPOSE_CONTIGUOUS = 3
 internal const val U_BUFFER_OVERFLOW_ERROR = 15
 internal const val U_STRING_NOT_TERMINATED_WARNING = -124
 

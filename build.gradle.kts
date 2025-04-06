@@ -84,7 +84,7 @@ kotlin {
             get().dependsOn(linux64Main)
         }
 
-        val linux32Main by creating { dependsOn(commonMain.get()) }
+//        val linux32Main by creating { dependsOn(commonMain.get()) }
         fun NamedDomainObjectProvider<KotlinSourceSet>.linux32() {
 //            get().dependsOn(linux32Main)
             linux64()
