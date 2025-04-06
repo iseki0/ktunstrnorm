@@ -1,15 +1,27 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import java.util.*
 
 plugins {
     kotlin("multiplatform") version "2.1.20"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.17.0"
+    `maven-publish`
+    signing
 }
 
-group = "space.iseki.ktunstrnorm"
-version = "0.0.0-SNAPSHOT"
+allprojects {
+    group = "space.iseki.ktunstrnorm"
+    version = "0.0.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType<AbstractArchiveTask> {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
+
 }
 
 dependencies {
@@ -25,7 +37,7 @@ kotlin {
         }
         jvm {
             compilerOptions {
-//                jvmTarget = JvmTarget.JVM_1_8
+                jvmTarget = JvmTarget.JVM_1_8
                 freeCompilerArgs.add("-Xjvm-default=all-compatibility")
             }
         }
@@ -85,7 +97,7 @@ kotlin {
             get().dependsOn(linux64Main)
         }
 
-//        val linux32Main by creating { dependsOn(commonMain.get()) }
+        //        val linux32Main by creating { dependsOn(commonMain.get()) }
         fun NamedDomainObjectProvider<KotlinSourceSet>.linux32() {
 //            get().dependsOn(linux32Main)
             linux64()
@@ -118,5 +130,73 @@ kotlin {
         mingwX64Main
         watchosDeviceArm64Main.apple64()
 
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "Central"
+            afterEvaluate {
+                url = if (version.toString().endsWith("SNAPSHOT")) {
+                    // uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
+                    uri("https://oss.sonatype.org/content/repositories/snapshots")
+                } else {
+                    // uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+                    uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                }
+            }
+            credentials {
+                username = properties["ossrhUsername"]?.toString() ?: System.getenv("OSSRH_USERNAME")
+                password = properties["ossrhPassword"]?.toString() ?: System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+    publications {
+        withType<MavenPublication> {
+            val pubName = name.replaceFirstChar { it.titlecase(Locale.getDefault()) }
+            val emptyJavadocJar by tasks.register<Jar>("emptyJavadocJar$pubName") {
+                archiveClassifier = "javadoc"
+                archiveBaseName = artifactId
+            }
+            artifact(emptyJavadocJar)
+            pom {
+                val projectUrl = "https://github.com/iseki0/ktunstrnorm"
+                description = "A very small library provide Unicode normalization for Kotlin Multiplatform"
+                url = projectUrl
+                licenses {
+                    license {
+                        name = "Apache-2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "iseki0"
+                        name = "iseki zero"
+                        email = "iseki@iseki.space"
+                    }
+                }
+                inceptionYear = "2025"
+                scm {
+                    connection = "scm:git:$projectUrl.git"
+                    developerConnection = "scm:git:$projectUrl.git"
+                    url = projectUrl
+                }
+                issueManagement {
+                    system = "GitHub"
+                    url = "$projectUrl/issues"
+                }
+                ciManagement {
+                    system = "GitHub"
+                    url = "$projectUrl/actions"
+                }
+            }
+        }
     }
 }
