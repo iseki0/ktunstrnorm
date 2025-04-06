@@ -1,0 +1,14 @@
+public final class space/iseki/ktunstrnorm/NKt {
+	public static final fun normalize (Ljava/lang/String;Lspace/iseki/ktunstrnorm/NormalizationForm;)Ljava/lang/String;
+}
+
+public final class space/iseki/ktunstrnorm/NormalizationForm : java/lang/Enum {
+	public static final field NFC Lspace/iseki/ktunstrnorm/NormalizationForm;
+	public static final field NFD Lspace/iseki/ktunstrnorm/NormalizationForm;
+	public static final field NFKC Lspace/iseki/ktunstrnorm/NormalizationForm;
+	public static final field NFKD Lspace/iseki/ktunstrnorm/NormalizationForm;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lspace/iseki/ktunstrnorm/NormalizationForm;
+	public static fun values ()[Lspace/iseki/ktunstrnorm/NormalizationForm;
+}
+
