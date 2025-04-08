@@ -35,7 +35,7 @@ Unicode normalization function in Kotlin/Multiplatform, use platform APIs.
 fun main() {
     val input = "\u0065\u0301"     // e + ́ = U+0065 U+0301
     val expected = "\u00E9"        // é = U+00E9
-    val result = doConvert(input, NormalizationForm.NFC)
+    val result = input.normalize(NormalizationForm.NFC)
     println(result)
     check(expected == result)
 }
