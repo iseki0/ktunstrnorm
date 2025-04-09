@@ -179,8 +179,8 @@ publishing {
                 url = projectUrl
                 licenses {
                     license {
-                        name = "Apache-2.0"
-                        url = "https://www.apache.org/licenses/LICENSE-2.0"
+                        name = "MIT"
+                        url = "https://github.com/iseki0/ktunstrnorm/blob/master/LICENSE"
                     }
                 }
                 developers {
