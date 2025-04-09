@@ -26,6 +26,7 @@ import platform.posix.RTLD_LAZY
 import platform.posix.dlclose
 import platform.posix.dlopen
 import platform.posix.dlsym
+import kotlin.concurrent.Volatile
 
 internal const val UNORM2_COMPOSE = 0
 internal const val UNORM2_DECOMPOSE = 1
@@ -59,8 +60,10 @@ internal typealias Unorm2GetInstanceFn = CPointer<CFunction<(
     pErrorCode: UErrorCodeVar,
 ) -> CPointer<UNormalizer2>?>>
 
-internal val normalizer by lazy { LibLoader.loadLib() }
+@Volatile
+var backupNormalizerFn: ((String, NormalizationForm) -> String)? = null
 
+internal val normalizer by lazy { runCatching { LibLoader.loadLib() } }
 
 @OptIn(ExperimentalForeignApi::class)
 internal object LibLoader {
@@ -156,13 +159,17 @@ internal object LibLoader {
 }
 
 internal fun errorMessage(e: Int): String? {
-    return normalizer.uerrorNameFn.invoke(e)?.toKStringFromUtf8()
+    return normalizer.getOrNull()?.uerrorNameFn?.invoke(e)?.toKStringFromUtf8()
 }
 
 internal actual fun doConvert(input: String, form: NormalizationForm): String {
     if (input.isEmpty()) return ""
 
-    val normalizers = normalizer
+    val normalizers = normalizer.getOrNull() ?: return backupNormalizerFn?.invoke(input, form)
+        ?: throw UnicodeNormalizationImplNotReadyError(
+            message = "ICU library is not ready. Please ensure that a compatible version of the ICU library is installed. If you are using static linking, dynamic loading may not be possible. Feel free to open an issue if the problem persists.",
+            cause = normalizer.exceptionOrNull(),
+        )
     val normalizeFn = normalizers.normalizeFn
 
     // 1. 选择对应的 normalizer
